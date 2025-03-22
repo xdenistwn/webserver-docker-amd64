@@ -1,0 +1,3 @@
+# /projects/*
+/dockerfiles/dockerfile.arc
+.env
