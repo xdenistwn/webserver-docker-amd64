@@ -18,6 +18,14 @@ webserver-docker-amd64 is a web server application that run using docker contain
         - PostgreSQL
         - MySQL
         - PDO
+- PHP 8.3.20
+    - Wkhtmltopdf 0.12.6.1-r3
+    - Composer 2.8.8
+    - DB connect
+        - Oracle 11.2 / 19
+        - PostgreSQL
+        - MySQL
+        - PDO
 
 `Requirements`
 - Machine that using amd64 architecture
@@ -41,7 +49,12 @@ webserver-docker-amd64 is a web server application that run using docker contain
     docker build -t php71:latest-dev -f ./dockerfiles/Dockerfile.php71 .
     ```
 
-- Run Web Server using docker-compose.yml
+- Install Docker Images PHP 8.3.2
+    ```bash
+    docker build -t php83:latest-dev -f ./dockerfiles/Dockerfile.php83 .
+    ```
+
+- Run Web Server using docker-compose.yml (important: dont forget to change YOUR_FREAKING_SHARED_PROJECT_HERE with your own sharing project folder directory in docker-compose.yml)
     ```bash
     docker compose up -d
     ```
@@ -68,6 +81,22 @@ webserver-docker-amd64 is a web server application that run using docker contain
     - docker exec -it php71 sh -c "cd your_project && composer --version"
     ```
 
+## Important for Windows user using WSL2
+You need to enable filesystem sharing between WSL and Windows File system.
+Temporary way, below:
+- open up wsl config in wsl distro, here im using Ubuntu-22.04
+    ```bash
+    sudo vi /etc/wsl.conf
+    ```
+
+- Add below config at the bottom or last line
+    ```bash
+    	[automount]
+	options="metadata"
+    ```
+
+- Save it. then try again, now wsl should be able to run chmod/chown under windows file system.
+
 ## Directory & Files Structure
 ```
 / --- root folder
@@ -92,5 +121,5 @@ webserver-docker-amd64 is a web server application that run using docker contain
 - DO NOT update .gitignore especially /projects dir 😱
 
 ## Next Update Goals
-- Ability to use PHP 8.1 and the other related libraries
 - Node.js runtime
+- Making Stable in WSL2 system
