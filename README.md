@@ -29,57 +29,9 @@ webserver-docker-amd64 is a web server application that run using docker contain
 
 `Requirements`
 - Machine that using amd64 architecture
-- Pre-installed docker engine / desktop
+- docker-engine
 - Internet Access (to download and build images)
 - Clone / Download this repo
-
-## Guides (how to setup)
-- Goto repo root directory
-    ```bash
-    cd to/your/downloaded/repo
-    ```
-
-- Install Docker Images nginx
-    ```bash
-    docker build -t nginx:latest-dev -f ./dockerfiles/Dockerfile.nginx .
-    ```
-
-- Install Docker Images PHP 7.1
-    ```bash
-    docker build -t php71:latest-dev -f ./dockerfiles/Dockerfile.php71 .
-    ```
-
-- Install Docker Images PHP 8.3.2
-    ```bash
-    docker build -t php83:latest-dev -f ./dockerfiles/Dockerfile.php83 .
-    ```
-
-- Run Web Server using docker-compose.yml (important: dont forget to change YOUR_FREAKING_SHARED_PROJECT_HERE with your own sharing project folder directory in docker-compose.yml)
-    ```bash
-    docker compose up -d
-    ```
-
-- Stop Web Server using docker-compose.yml
-    ```bash
-    docker compose stop
-    ```
-
-- Remove/Delete Web Server using docker-compose.yml (optional)
-    ```bash
-    docker compose down
-    ```
-
-- How to run **php71** console script from outside container
-    ```bash
-    check php modules
-    - docker exec -it php71 sh -c "php -m"
-    
-    yii2 console 
-    - docker exec -it php71 sh -c "php yii some/controller-script"
-    
-    composer console 
-    - docker exec -it php71 sh -c "cd your_project && composer --version"
-    ```
 
 ## Important for Windows user using WSL2
 You need to enable filesystem sharing between WSL and Windows File system.
@@ -91,11 +43,76 @@ Temporary way, below:
 
 - Add below config at the bottom or last line
     ```bash
-    	[automount]
+    [automount]
 	options="metadata"
     ```
 
 - Save it. then try again, now wsl should be able to run chmod/chown under windows file system.
+
+
+## Guides (how to run webserver)
+- Goto repo root directory
+
+  ```bash
+  cd to/your/downloaded/repo
+  ```
+
+- Install Docker Images nginx
+
+  ```bash
+  docker build -t nginx:latest-dev -f ./dockerfiles/Dockerfile.nginx .
+  ```
+
+- Install Docker Images PHP 7.1
+
+  ```bash
+  docker build -t php71:latest-dev -f ./dockerfiles/Dockerfile.php71 .
+  ```
+
+- Install Docker Images PHP 8.3.2
+
+  ```bash
+  docker build -t php83:latest-dev -f ./dockerfiles/Dockerfile.php83 .
+  ```
+
+- Run Web Server using docker-compose.yml (important: dont forget to change YOUR_SHARED_PROJECTS_DIRECTORY with your own sharing project folder directory in docker-compose.yml)
+
+  ```bash
+  docker-compose up -d
+  ```
+
+- Stop Web Server using docker-compose.yml
+
+  ```bash
+  docker-compose stop
+  ```
+
+- Remove/Delete Web Server using docker-compose.yml (optional)
+
+  ```bash
+  docker-compose down
+  ```
+
+- How to run **php83** console script from outside container
+
+  ```bash
+  check php modules
+  - docker exec -it php83 sh -c "php -m"
+
+  yii2 console
+  - docker exec -it php83 sh -c "cd your_yii2_project php yii some/controller-script"
+
+  composer
+  - docker exec -it php83 sh -c "cd your_yii2_project && composer --version"
+
+  install project with composer
+  - docker exec -it php83 sh -c "composer create-project --prefer-dist yiisoft/yii2-app-basic your_yii2_project"
+  ```
+
+- After Install some project try to access it with this url
+  ```
+  http://localhost/your_yii2_project/web
+  ```
 
 ## Directory & Files Structure
 ```
@@ -117,9 +134,9 @@ Temporary way, below:
 - Some projects may need some adjustment in the configuration.
 - We still maintain & update this repo for flexibility, patch and security update.
 - If you found any error/bug/improvement, please raise in issues.
-- any help will be appreciated.
-- DO NOT update .gitignore especially /projects dir 😱
+- any help/contribution will be appreciated.
 
 ## Next Update Goals
 - Node.js runtime
 - Making Stable in WSL2 system
+- Updating docker build deprecated version in macos
