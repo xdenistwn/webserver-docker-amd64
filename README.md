@@ -1,18 +1,18 @@
-# About !t (x86 x64 version)
-webserver-docker-amd64 is a web server application that run using docker containers tools and has ability of sharing project directory under localhost domain, like xampp htdocs does. this version work only for amd64 CPU.
+# About !t (amd64 version)
+webserver-docker-amd64 is a web server application that run using docker containers tools and has ability of sharing project directory under localhost domain, like xampp htdocs does. this version work only for amd64 architecture.
 
 `Main goals of using container`
 - keep your development machine clean of unnecessary libraries 😎
 - keep development dependencies consistent on all machine 😏
-- easy to upgrade / downgrade libraries version ✌️
+- easy to upgrade / downgrade libraries✌️
 - learning docker container help you to understand basic linux operation 😍
-- easy install to run development project 🥳
+- experiments with open-source tools without worrying about dependencies error.
 
 `Current stacks`
 - Nginx latest
 - PHP 7.1
     - Wkhtmltopdf 0.12.6
-    - Composer 2.2
+    - Composer 1.1
     - DB connect
         - Oracle 11.2 / 19
         - PostgreSQL
@@ -31,12 +31,11 @@ webserver-docker-amd64 is a web server application that run using docker contain
 - Machine that using amd64 architecture
 - docker-engine
 - Internet Access (to download and build images)
-- Clone / Download this repo
 
 ## Important for Windows user using WSL2
 You need to enable filesystem sharing between WSL and Windows File system.
-Temporary way, below:
-- open up wsl config in wsl distro, here im using Ubuntu-22.04
+Temporary way please follow below instruction:
+- open up wsl config in wsl linux distro, here im using Ubuntu-22.04
     ```bash
     sudo vi /etc/wsl.conf
     ```
@@ -44,7 +43,7 @@ Temporary way, below:
 - Add below config at the bottom or last line
     ```bash
     [automount]
-	options="metadata"
+    options="metadata"
     ```
 
 - Save it. then try again, now wsl should be able to run chmod/chown under windows file system.
@@ -112,6 +111,7 @@ Temporary way, below:
 - After Install some project try to access it with this url
   ```
   http://localhost/your_yii2_project/web
+  http://localhost/your_laravel_project/web
   ```
 
 ## Directory & Files Structure
@@ -139,4 +139,3 @@ Temporary way, below:
 ## Next Update Goals
 - Node.js runtime
 - Making Stable in WSL2 system
-- Updating docker build deprecated version in macos
