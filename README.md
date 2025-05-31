@@ -74,7 +74,17 @@ Temporary way please follow below instruction:
   docker build -t php83:latest-dev -f ./dockerfiles/Dockerfile.php83 .
   ```
 
-- Run Web Server using docker-compose.yml (important: dont forget to change YOUR_SHARED_PROJECTS_DIRECTORY with your own sharing project folder directory in docker-compose.yml)
+- Setup projects directory
+
+  ```bash
+  copy example as .env:
+  cp .env.example .env
+
+  open up .env file and change the project path (must be linux path):
+  PROJECTS_PATH=/mnt/c/Users/my_working_project/projects
+  ```
+
+- Run Web Server using docker-compose.yml
 
   ```bash
   docker-compose up -d
