@@ -10,6 +10,8 @@ RUN apt-get update && \
         zip \
         vim \
         unzip \
+        # phpspreadshit
+        libpng-dev \
         # php dependencies
         libssl-dev \
         libcurl4-openssl-dev \
@@ -35,29 +37,29 @@ RUN docker-php-ext-install mcrypt pdo pdo_pgsql mysqli pdo_mysql
 # Oracle Installation
 # ENV setup
 ###
-ENV LD_LIBRARY_PATH="/opt/oracle/instantclient_19_6"
-ENV ORACLE_HOME="/opt/oracle/instantclient_19_6"
-ENV OCI_HOME="/opt/oracle/instantclient_19_6"
-ENV OCI_LIB_DIR="/opt/oracle/instantclient_19_6"
-ENV OCI_INCLUDE_DIR="/opt/oracle/instantclient_19_6/sdk/include"
+ENV LD_LIBRARY_PATH="/opt/oracle/instantclient_19_19"
+ENV ORACLE_HOME="/opt/oracle/instantclient_19_19"
+ENV OCI_HOME="/opt/oracle/instantclient_19_19"
+ENV OCI_LIB_DIR="/opt/oracle/instantclient_19_19"
+ENV OCI_INCLUDE_DIR="/opt/oracle/instantclient_19_19/sdk/include"
 ENV OCI_VERSION=19
 
 ##
 # Oracle Installation
 # Install Procedure
-### 
+###
 RUN mkdir /opt/oracle
-ADD dockerfiles/oracle/instantclient-basic-linux.x64-19.6.0.0.0dbru.zip /opt/oracle
-ADD dockerfiles/oracle/instantclient-sdk-linux.x64-19.6.0.0.0dbru.zip /opt/oracle
-RUN cd /opt/oracle && unzip instantclient-basic-linux.x64-19.6.0.0.0dbru.zip -d /opt/oracle \
-    && unzip instantclient-sdk-linux.x64-19.6.0.0.0dbru.zip -d /opt/oracle \
-    && echo /opt/oracle/instantclient_19_6 > /etc/ld.so.conf.d/oracle-instantclient.conf \
+ADD dockerfiles/oracle/instantclient-basic-linux-arm64.zip /opt/oracle
+ADD dockerfiles/oracle/instantclient-sdk-linux-arm64.zip /opt/oracle
+RUN cd /opt/oracle && unzip instantclient-basic-linux-arm64.zip -d /opt/oracle \
+    && unzip instantclient-sdk-linux-arm64.zip -d /opt/oracle \
+    && echo /opt/oracle/instantclient_19_19 > /etc/ld.so.conf.d/oracle-instantclient.conf \
     && ldconfig
 
-RUN echo 'instantclient,/opt/oracle/instantclient_19_6' | pecl install oci8-2.2.0 \
+RUN echo 'instantclient,/opt/oracle/instantclient_19_19' | pecl install oci8-2.2.0 \
     && echo "extension=oci8.so" >> /usr/local/etc/php/conf.d/oci8.ini
 
-RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_19_6,19.6 && \
+RUN docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_19_19,19.19 && \
     echo "extension=pdo_oci.so" > /usr/local/etc/php/conf.d/pdo_oci.ini
 
 RUN docker-php-ext-install \
@@ -68,21 +70,22 @@ RUN docker-php-ext-install \
     sysvmsg \
     sysvsem \
     sysvshm \
-    zip
+    zip \
+    gd
 
 RUN docker-php-ext-enable pdo_pgsql pdo_mysql
 
 # install wkhtmltopdf ARM64 base
 RUN mkdir /opt/wkhtmltopdf
 RUN cd /opt/wkhtmltopdf \
-    && wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb \
-    && dpkg -i wkhtmltox_0.12.6-1.buster_amd64.deb \
-    && rm wkhtmltox_0.12.6-1.buster_amd64.deb
+    && wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_arm64.deb \
+    && dpkg -i wkhtmltox_0.12.6-1.buster_arm64.deb \
+    && rm wkhtmltox_0.12.6-1.buster_arm64.deb
 
 # install composer
-COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
-# support composer:2.2 for php 7.1.33
-RUN composer self-update
+COPY --from=composer:1.1 /usr/bin/composer /usr/bin/composer
+# support composer:1.1 for php 7.1.33
+# RUN composer self-update
 
 # Clean up
 RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
