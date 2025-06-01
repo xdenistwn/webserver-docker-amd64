@@ -36,12 +36,12 @@ webserver-docker-amd64 is a web server application that run using docker contain
 You need to enable filesystem sharing between WSL and Windows File system.
 Temporary way please follow below instruction:
 - open up wsl config in wsl linux distro, here im using Ubuntu-22.04
-    ```bash
+    ```
     sudo vi /etc/wsl.conf
     ```
 
 - Add below config at the bottom or last line
-    ```bash
+    ```
     [automount]
     options="metadata"
     ```
@@ -50,72 +50,62 @@ Temporary way please follow below instruction:
 
 
 ## Guides (how to run webserver)
-- Goto repo root directory
+- in terminal (wsl/colima) Goto repo root directory
 
-  ```bash
-  cd to/your/downloaded/repo
+  ```
+  cd to/your/web_server_docker
   ```
 
-- Install Docker Images nginx
+- Build docker images
 
-  ```bash
-  docker build -t nginx:latest-dev -f ./dockerfiles/Dockerfile.nginx .
   ```
-
-- Install Docker Images PHP 7.1
-
-  ```bash
-  docker build -t php71:latest-dev -f ./dockerfiles/Dockerfile.php71 .
-  ```
-
-- Install Docker Images PHP 8.3.2
-
-  ```bash
-  docker build -t php83:latest-dev -f ./dockerfiles/Dockerfile.php83 .
+  docker compose -f docker-compose.build.yml build
   ```
 
 - Setup projects directory
 
-  ```bash
-  copy example as .env:
+  ```
+  copy .env.example and rename it as .env
+  ---
   cp .env.example .env
 
-  open up .env file and change the project path (must be linux path):
+  open up .env file and change the project path (must be in linux path format)
+  ---
   PROJECTS_PATH=/mnt/c/Users/my_working_project/projects
   ```
 
 - Run Web Server using docker-compose.yml
 
-  ```bash
-  docker-compose up -d
+  ```
+  docker compose up -d
   ```
 
 - Stop Web Server using docker-compose.yml
 
-  ```bash
-  docker-compose stop
+  ```
+  docker compose stop
   ```
 
 - Remove/Delete Web Server using docker-compose.yml (optional)
 
-  ```bash
+  ```
   docker-compose down
   ```
 
 - How to run **php83** console script from outside container
 
-  ```bash
+  ```
   check php modules
-  - docker exec -it php83 sh -c "php -m"
+  - docker compose exec php83 sh -c "php -m"
 
   yii2 console
-  - docker exec -it php83 sh -c "cd your_yii2_project php yii some/controller-script"
+  - docker compose exec php83 sh -c "cd your_yii2_project && php yii some/controller-script"
 
-  composer
-  - docker exec -it php83 sh -c "cd your_yii2_project && composer --version"
+  composer (check up version)
+  - docker compose run --rm composer_php8 sh -c "cd your_yii2_project && composer --version"
 
   install project with composer
-  - docker exec -it php83 sh -c "composer create-project --prefer-dist yiisoft/yii2-app-basic your_yii2_project"
+  - docker compose run --rm composer_php8 sh -c "composer create-project --prefer-dist yiisoft/yii2-app-basic your_yii2_project"
   ```
 
 - After Install some project try to access it with this url

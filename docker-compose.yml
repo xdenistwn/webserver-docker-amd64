@@ -1,10 +1,9 @@
-# sample
 # YOUR_SHARED_PROJECTS_DIRECTORY = /Usr/user-pc/work_dir/projects
 # put your working svn, git project inside it.
 #
-# nginx port
-# 80 => using php 83
-# 8070 => using php 71
+# nginx port:
+# localhsot => using php 83
+# localhost:8070 => using php 71
 
 services:
   nginx:
@@ -23,7 +22,7 @@ services:
       - internal_dockernet
 
   php71:
-    image: php71:latest-dev
+    image: php71:latest-basic
     container_name: php71
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
@@ -36,7 +35,7 @@ services:
       - internal_dockernet
 
   php83:
-    image: php83:latest-dev
+    image: php83:latest-basic
     container_name: php83
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
@@ -47,6 +46,18 @@ services:
       - 9000
     networks:
       - internal_dockernet
+  
+  composer_php8:
+    image: composer:2.8.8
+    container_name: composer_php8
+    volumes:
+      - ${PROJECTS_PATH}:/app
+  
+  composer_php7:
+    image: composer:1.1.3
+    container_name: composer_php7
+    volumes:
+      - ${PROJECTS_PATH}:/app
 
 networks:
   internal_dockernet:
