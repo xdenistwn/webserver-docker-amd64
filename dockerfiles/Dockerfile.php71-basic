@@ -1,27 +1,21 @@
 FROM php:7.1-fpm
 
-# Install dependencies
-RUN apk add --no-cache --update \
-    libcurl \
-    libpq \
-    postgresql-dev \
-    curl-dev \
-    openssl-dev \
-    bzip2-dev \
-    libxml2-dev \
-    libmcrypt-dev \
-    php7-pear \
-    php7-dev \
-    autoconf \
-    g++ \
-    make
+RUN apt-get update && \
+    apt-get install -y \
+        # php dependencies
+        libssl-dev \
+        libcurl4-openssl-dev \
+        libmcrypt-dev \
+        # postgresql dependencies
+        libpq-dev
 
-# Install PHP extensions
 RUN docker-php-ext-install \
     mcrypt \
     pdo_pgsql \
     pdo_mysql \
     bcmath
 
-# Clean up (Alpine-based, but no apt clean needed)
-RUN rm -rf /var/cache/apk/*
+RUN docker-php-ext-enable pdo_pgsql pdo_mysql
+
+# Clean up
+RUN apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
