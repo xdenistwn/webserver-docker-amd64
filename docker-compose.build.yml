@@ -1,20 +1,34 @@
+#
+#--------------------------------------------------------------------------
+# docker-compose.build.yml
+#--------------------------------------------------------------------------
+#
+# Here is where you can register your build dockerfile.
+# For sample I just set this file to basic php-fpm config. 
+# feel free to modify it base on your need.
+# 
+# notes:
+# Do not use this compose build file to run the container.
+# Instead please use docker-compose.yml file to run the web server.
+#
+
 services:
   nginx:
     image: nginx:latest-dev
     build:
-      context: ./dockerfiles
+      context: ./dockerfiles/nginx
       dockerfile: Dockerfile.nginx
 
   php71basic:
     image: php71:latest-basic
     build:
-      context: ./dockerfiles
+      context: ./dockerfiles/php
       dockerfile: Dockerfile.php71-basic
 
   php83basic:
     image: php83:latest-basic
     build:
-      context: ./dockerfiles
+      context: ./dockerfiles/php
       dockerfile: Dockerfile.php83-basic
 
   # php71:
@@ -28,9 +42,3 @@ services:
   #   build:
   #     context: ./dockerfiles
   #     dockerfile: Dockerfile.php83
-  
-  composer_288:
-    image: composer:2.8.8
-  
-  composer_113:
-    image: composer:1.1.3

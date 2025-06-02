@@ -1,9 +1,17 @@
-# YOUR_SHARED_PROJECTS_DIRECTORY = /Usr/user-pc/work_dir/projects
-# put your working svn, git project inside it.
 #
-# nginx port:
-# localhsot => using php 83
-# localhost:8070 => using php 71
+#--------------------------------------------------------------------------
+# docker-compose.yml
+#--------------------------------------------------------------------------
+#
+# Here is where you can play around with your container stacks
+# Feel free to modify it base on your need.
+# 
+# notes:
+# set {PROJECTS_PATH} in .env file and must be in linux format.
+# put your working php projects inside PROJECTS_PATH dir
+# port 80/443 => using php-fpm 8.3
+# port 8070 => using php-fpm 7.1
+#
 
 services:
   nginx:
