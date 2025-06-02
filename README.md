@@ -29,7 +29,7 @@ webserver-docker-amd64 is a web server application that run using docker contain
 
 `Requirements`
 - Machine that using amd64 architecture
-- docker-engine
+- Docker desktop or lightweight vm such as WSL/colima/etc to run docker engine
 - Internet Access (to download and build images)
 
 ## Important for Windows user using WSL2
