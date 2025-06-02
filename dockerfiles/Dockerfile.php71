@@ -43,8 +43,8 @@ ENV OCI_INCLUDE_DIR="/opt/oracle/instantclient_19_6/sdk/include"
 ENV OCI_VERSION=19
 
 RUN mkdir /opt/oracle
-ADD ../../packages/oracle/instantclient-basic-linux.x64-19.6.0.0.0dbru.zip /opt/oracle
-ADD ../../packages/oracle/instantclient-sdk-linux.x64-19.6.0.0.0dbru.zip /opt/oracle
+ADD packages/oracle/instantclient-basic-linux.x64-19.6.0.0.0dbru.zip /opt/oracle
+ADD packages/oracle/instantclient-sdk-linux.x64-19.6.0.0.0dbru.zip /opt/oracle
 RUN cd /opt/oracle && unzip instantclient-basic-linux.x64-19.6.0.0.0dbru.zip -d /opt/oracle \
     && unzip instantclient-sdk-linux.x64-19.6.0.0.0dbru.zip -d /opt/oracle \
     && echo /opt/oracle/instantclient_19_6 > /etc/ld.so.conf.d/oracle-instantclient.conf \
