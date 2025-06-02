@@ -59,7 +59,7 @@ Temporary way please follow below instruction:
 - Build docker images
 
   ```
-  docker compose -f docker-compose.build.yml build
+  docker compose -f dockerfiles/docker-compose.build.yml build
   ```
 
 - Setup projects directory
