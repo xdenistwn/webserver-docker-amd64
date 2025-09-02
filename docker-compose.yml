@@ -26,6 +26,7 @@ services:
       - 80:80
       - 443:443
       - 8070:8070
+      - 8074:8074
     networks:
       - internal_dockernet
 
@@ -34,7 +35,7 @@ services:
     container_name: php71
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
-      - ./config/php/v7/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - ./config/php/v71/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
     environment:
       - TZ=Asia/Jakarta
     expose:
@@ -42,12 +43,25 @@ services:
     networks:
       - internal_dockernet
 
-  php83:
-    image: php83:latest-dev
-    container_name: php83
+  php74:
+    image: php74:latest-dev
+    container_name: php74
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
-      - ./config/php/v8/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - ./config/php/v74/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+    environment:
+      - TZ=Asia/Jakarta
+    expose:
+      - 9000
+    networks:
+      - internal_dockernet
+
+  php84:
+    image: php84:latest-dev
+    container_name: php84
+    volumes:
+      - ${PROJECTS_PATH}:/var/www/html
+      - ./config/php/v84/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
     environment:
       - TZ=Asia/Jakarta
     expose:
