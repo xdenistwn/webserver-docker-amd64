@@ -2,10 +2,10 @@
 webserver-docker-amd64 is a web server application that run using docker containers tools and has ability of sharing project directory under localhost domain, like xampp htdocs does. this version work only for amd64 architecture.
 
 `Main goals of using container`
-- keep your development machine clean of unnecessary libraries 😎
-- keep development dependencies consistent on all machine 😏
-- easy to upgrade / downgrade libraries✌️
-- learning docker container help you to understand basic linux operation 😍
+- keep your development machine clean of unnecessary libraries.
+- keep development dependencies consistent a cross all machine.
+- easy to upgrade / downgrade libraries.
+- learning docker container help you to understand basic system design.
 - experiments with open-source tools without worrying about dependencies error.
 
 `Current stacks`
@@ -18,7 +18,15 @@ webserver-docker-amd64 is a web server application that run using docker contain
         - PostgreSQL
         - MySQL
         - PDO
-- PHP 8.3.20
+- PHP 7.4
+    - Wkhtmltopdf 0.12.6.1-r3
+    - Composer 2.8.8
+    - DB connect
+        - Oracle 11.2 / 19
+        - PostgreSQL
+        - MySQL
+        - PDO
+- PHP 8.4
     - Wkhtmltopdf 0.12.6.1-r3
     - Composer 2.8.8
     - DB connect
@@ -29,13 +37,12 @@ webserver-docker-amd64 is a web server application that run using docker contain
 
 `Requirements`
 - Machine that using amd64 architecture
-- Docker desktop or lightweight vm such as WSL/colima/etc to run docker engine
+- for windows/mac OS you need to install docker engine
 - Internet Access (to download and build images)
 
-## Important for Windows user using WSL2
-You need to enable filesystem sharing between WSL and Windows File system.
-Temporary way please follow below instruction:
-- open up wsl config in wsl linux distro, here im using Ubuntu-22.04
+## Important for Windows user
+You need to enable filesystem sharing between WSL and Windows File system. if you have not install wsl2 yet, you follow this guide [install WSL2 guide here.](config/wsl/README.md)
+- open up wsl config in wsl linux distro, here im using Ubuntu-22.04 and vim
     ```
     sudo vi /etc/wsl.conf
     ```
@@ -49,7 +56,7 @@ Temporary way please follow below instruction:
 - Save it. then try again, now wsl should be able to run chmod/chown under windows file system.
 
 
-## Guides (how to run webserver)
+## Guide to start docker webserver
 - in terminal (wsl/colima) Goto repo root directory
 
   ```
@@ -62,56 +69,52 @@ Temporary way please follow below instruction:
   docker compose -f dockerfiles/docker-compose.build.yml build
   ```
 
-- Setup projects directory
+- Copy .env.example and rename it as .env
 
   ```
-  copy .env.example and rename it as .env
-  ---
   cp .env.example .env
+  ```
+- Change into your projects dir path (must using linux path format)
 
-  open up .env file and change the project path (must be in linux path format)
-  ---
-  PROJECTS_PATH=/mnt/c/Users/my_working_project/projects
+  ```
+  PROJECTS_PATH=/mnt/c/my_working_project/my_projects
   ```
 
-- Run Web Server using docker-compose.yml
-
+- Start container services
   ```
   docker compose up -d
   ```
 
-- Stop Web Server using docker-compose.yml
-
+- Stop container services
   ```
   docker compose stop
   ```
 
-- Remove/Delete Web Server using docker-compose.yml (optional)
-
+- Remove container services (optional)
   ```
-  docker-compose down
+  docker compose down
   ```
 
-- How to run **php83** console script from outside container
-
+- How to run **php84** console script from outside container
   ```
   check php modules
-  - docker compose exec php83 sh -c "php -m"
+  - docker compose exec php84 sh -c "php -m"
 
   yii2 console
-  - docker compose exec php83 sh -c "cd your_yii2_project_name && php yii some/controller-script"
+  - docker compose exec php84 sh -c "cd your_yii2_project_name && php yii some/controller-script"
 
   composer (check up version)
-  - docker compose exec php83 sh -c "cd your_yii2_project_name && composer --version"
+  - docker compose exec php84 sh -c "cd your_yii2_project_name && composer --version"
 
   install project with composer
-  - docker compose exec php83 sh -c "composer create-project --prefer-dist yiisoft/yii2-app-basic your_yii2_project_name"
+  - docker compose exec php84 sh -c "composer create-project --prefer-dist yiisoft/yii2-app-basic your_yii2_project_name"
   ```
 
 - After Install some project try to access it with this url
   ```
   http://localhost/your_yii2_project/web
-  http://localhost/your_laravel_project/web
+  http://localhost:8070/your_laravel_project/public
+  http://localhost:8074/your_laravel_project/public
   ```
 
 ## Directory & Files Structure
@@ -119,12 +122,12 @@ Temporary way please follow below instruction:
 / --- root folder
 /config --- custom configuration
 /config/nginx --- custom configuration for nginx container
-/config/nginx/nginx.conf --- default or entry point nginx config
+/config/nginx/nginx.conf --- default or entry point of nginx config
 /config/php --- custom configuration for php
-/config/php/v7/zz-docker.conf --- config for php-fpm 7.*
-/config/php/v8/zz-docker.conf --- config for php-fpm 8.*
+/config/php/v7*/zz-docker.conf --- config for php-fpm 7.*
+/config/php/v8*/zz-docker.conf --- config for php-fpm 8.*
 /dockerfiles --- docker files config
-/projects --- all development projects inside this dir
+/dockerfiles/docker-compose.build.yml --- docker compose configuration to build the image
 /docker-compose.yml ---- docker compose configuration
 /.gitignore --- :x
 
@@ -137,5 +140,4 @@ Temporary way please follow below instruction:
 - any help/contribution will be appreciated.
 
 ## Next Update Goals
-- Node.js runtime
 - Making Stable in WSL2 system
