@@ -40,6 +40,8 @@ services:
     image: php71:latest-dev
     container_name: php71
     restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
       - ./config/php/v71/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
@@ -53,6 +55,7 @@ services:
   php74:
     image: php74:latest-dev
     container_name: php74
+    restart: unless-stopped
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
       - ./config/php/v74/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
@@ -76,7 +79,7 @@ services:
       - 9000
     networks:
       - internal_dockernet
-
+  
 networks:
   internal_dockernet:
     driver: bridge
