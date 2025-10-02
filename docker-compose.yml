@@ -5,7 +5,7 @@
 #
 # Here is where you can play around with your container stacks
 # Feel free to modify it base on your need.
-# 
+#
 # notes:
 # set {PROJECTS_PATH} in .env file and must be in linux format.
 # put your working php projects inside PROJECTS_PATH dir
@@ -79,7 +79,7 @@ services:
       - 9000
     networks:
       - internal_dockernet
-  
+
 networks:
   internal_dockernet:
     driver: bridge
