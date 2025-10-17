@@ -26,18 +26,27 @@ webserver-docker-amd64 is a web server application that run using docker contain
 
 ## Important for Windows user
 You need to enable filesystem sharing between WSL and Windows File system. if you have not install wsl2 yet, you follow this guide [install WSL2 guide here.](config/wsl/README.md)
-- open up wsl config in wsl linux distro, here im using Ubuntu-22.04 and vim
+
+To Speedup your container network latency, you need to use host network instead of container network. you can follow this guide:
+- open up your cmd/terminal and goto your home dir (ex: C:/User/deni/.wslconfig)
+- create new file called .wslconfig and copy below configuration.
+    ```
+    [wsl2]
+    networkingMode=mirrored
+    ```
+- restart your wsl
+
+Bridge container storage to windows storage
+- Open up your wsl config in you linux distro.
     ```
     sudo vi /etc/wsl.conf
     ```
-
 - Add below config at the bottom or last line
     ```
     [automount]
     options="metadata"
     ```
-
-- Save it. then try again, now wsl should be able to run chmod/chown under windows file system.
+- Save it. restart your wsl, now wsl should be able to run chmod/chown under windows file system.
 
 
 ## Guide to start docker webserver
