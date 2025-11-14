@@ -28,11 +28,17 @@ webserver-docker-amd64 is a web server application that run using docker contain
 You need to enable filesystem sharing between WSL and Windows File system. if you have not install wsl2 yet, you follow this guide [install WSL2 guide here.](config/wsl/README.md)
 
 To Speedup your container network latency, you need to use host network instead of container network. you can follow this guide:
-- open up your cmd/terminal and goto your home dir (ex: C:/User/deni/.wslconfig)
+- open up your cmd/terminal and goto your home dir (ex: C:/User/Yourname/.wslconfig)
 - create new file called .wslconfig and copy below configuration.
     ```
     [wsl2]
-    networkingMode=mirrored
+    memory=8589934592
+    swap=0
+    localhostForwarding=true
+
+    [experimental]
+    autoProxy=true
+    dnsTunneling=true
     ```
 - restart your wsl
 
