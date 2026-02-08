@@ -9,9 +9,9 @@
 # notes:
 # set {PROJECTS_PATH} in .env file and must be in linux format.
 # put your working php projects inside PROJECTS_PATH dir
-# port 80/443 => using php-fpm 8.4
-# port 8070 => using php-fpm 7.1
-# port 8074 => using php-fpm 7.4
+# port 80/443 => using php-fpm 8.3
+# port 8084 => using php-fpm 8.4
+# port 8070 => using php-fpm 7.0
 #
 
 services:
@@ -27,30 +27,30 @@ services:
       - ./config/nginx/fastcgi_params:/etc/nginx/fastcgi_params
     network_mode: host
     depends_on:
-      - php71
-      - php74
+      - php70
+      - php83
       - php84
 
-  php71:
-    image: php71:latest-dev
-    container_name: php71
+  php70:
+    image: php70:latest-dev
+    container_name: php70
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
-      - ./config/php/v71/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - ./config/php/v70/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
     environment:
       - TZ=Asia/Jakarta
     network_mode: host
 
-  php74:
-    image: php74:latest-dev
-    container_name: php74
+  php83:
+    image: php83:latest-dev
+    container_name: php83
     restart: unless-stopped
     volumes:
       - ${PROJECTS_PATH}:/var/www/html
-      - ./config/php/v74/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - ./config/php/v83/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
     environment:
       - TZ=Asia/Jakarta
     network_mode: host
@@ -66,15 +66,30 @@ services:
       - TZ=Asia/Jakarta
     network_mode: host
 
-  postgresql:
+  postgres_one:
     image: postgres:alpine
-    container_name: postgresql
+    container_name: postgres_one
     ports:
       - "5431:5432"
     environment:
-      - POSTGRES_PASSWORD=test123
+      - POSTGRES_USER=${PGONE_USER}
+      - POSTGRES_PASSWORD=${PGONE_PASSWORD}
+      - POSTGRES_DB=${PGONE_DB}
     volumes:
-      - pgsql_data:/var/lib/postgresql/data
+      - pgsql_one_data:/var/lib/postgresql/data
+
+  postgres_two:
+    image: postgres:alpine
+    container_name: postgres_two
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=${PGTWO_USER}
+      - POSTGRES_PASSWORD=${PGTWO_PASSWORD}
+      - POSTGRES_DB=${PGTWO_DB}
+    volumes:
+      - pgsql_two_data:/var/lib/postgresql/data
 
 volumes:
-  pgsql_data:
+  pgsql_one_data:
+  pgsql_two_data:

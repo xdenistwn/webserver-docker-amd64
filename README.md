@@ -10,9 +10,10 @@ webserver-docker-amd64 is a web server application that run using docker contain
 
 `Current stacks`
 - Nginx latest
-- PHP 7.1 || PHP 7.4 || PHP 8.4
+- PHP 7.0 || PHP 8.3 || PHP 8.4
     - Wkhtmltopdf 0.12.6
     - Composer 2.2.25 || Composer 2.8.8
+    - Kafka Driver
     - DB connect
         - Oracle 11.2 / 19
         - PostgreSQL
