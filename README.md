@@ -17,14 +17,14 @@ This setup runs the following services:
 |--------------|----------------|-----------------|--------------------------------------|
 | Nginx        | nginx          | 80, 8074, 8071  | Web server that routes requests to the correct PHP version |
 | PHP 8.4      | php84          | 9084 (internal) | Default PHP used on port 80          |
-| PHP 8.3      | php74          | 9074 (internal) | PHP used on port 8074                |
+| PHP 7.4      | php74          | 9074 (internal) | PHP used on port 8074                |
 | PHP 7.1      | php71          | 9071 (internal) | PHP used on port 8071                |
 | PostgreSQL   | pgsql          | 5432            | Database server (Alpine-based)       |
 
 ### Port mapping summary
 
 - `http://localhost` or `http://localhost:80` -- uses PHP 8.4
-- `http://localhost:8074` -- uses PHP 8.3
+- `http://localhost:8074` -- uses PHP 7.4
 - `http://localhost:8071` -- uses PHP 7.1
 
 ---
@@ -35,13 +35,13 @@ Each PHP container comes with different tools and libraries pre-installed. The t
 
 ### PHP Extensions
 
-| Feature                    | PHP 8.4 | PHP 8.3 | PHP 7.1 |
+| Feature                    | PHP 8.4 | PHP 7.4 | PHP 7.1 |
 |----------------------------|---------|---------|---------|
 | PDO (base)                 | Yes     | Yes     | Yes     |
 | MySQL (mysqli, pdo_mysql)  | Yes     | Yes     | Yes     |
 | PostgreSQL (pdo_pgsql)     | Yes     | Yes     | Yes     |
 | Oracle (oci8, pdo_oci)     | Yes     | Yes     | Yes     |
-| Kafka (rdkafka)            | Yes     | Yes     | No      |
+| Kafka (rdkafka)            | Yes     | No      | No      |
 | Redis                      | Yes     | No      | No      |
 | Mcrypt                     | No      | No      | Yes     |
 | BCMath                     | Yes     | Yes     | Yes     |
@@ -49,14 +49,13 @@ Each PHP container comes with different tools and libraries pre-installed. The t
 | Sockets                    | Yes     | Yes     | Yes     |
 | ZIP                        | Yes     | Yes     | Yes     |
 | GD (image processing)      | Yes     | Yes     | Yes     |
-| SysV Messages/Semaphore/Shared Memory | Yes | Yes | Yes |
 
 ### Tools
 
-| Tool                 | PHP 8.4           | PHP 8.3           | PHP 7.1           |
+| Tool                 | PHP 8.4           | PHP 7.4           | PHP 7.1           |
 |----------------------|-------------------|-------------------|-------------------|
 | Composer             | 2.8.8             | 2.8.8             | 2.2.25            |
-| Node.js (LTS)       | Yes               | Yes               | No                |
+| Node.js (LTS)       | Yes               | No                | No                |
 | wkhtmltopdf          | 0.12.6.1          | 0.12.6.1          | 0.12.6            |
 | Git                  | Yes               | No                | No                |
 | Oracle Instant Client| 19.6              | 19.6              | 19.6              |
@@ -206,7 +205,7 @@ docker compose up -d
 Put your PHP project folders inside the `PROJECTS_PATH` directory, then visit:
 
 - `http://localhost/your-project-name` -- runs on PHP 8.4
-- `http://localhost:8074/your-project-name` -- runs on PHP 8.3
+- `http://localhost:8074/your-project-name` -- runs on PHP 7.4
 - `http://localhost:8071/your-project-name` -- runs on PHP 7.1
 
 ---
@@ -258,7 +257,7 @@ docker compose exec php84 sh -c "cd your-project && php yii migrate"
 docker compose exec php84 sh -c "cd your-project && php artisan migrate"
 ```
 
-**Run Node.js commands (PHP 8.4 and PHP 8.3 only):**
+**Run Node.js commands (PHP 8.4 and PHP 7.4 only):**
 
 ```bash
 docker compose exec php84 sh -c "node --version"
@@ -302,7 +301,7 @@ Or: `docker network rm local-network`
 Edit the PHP-FPM config files inside the `config/php/` folder:
 
 - `config/php/v84/zz-docker.conf` -- for PHP 8.4
-- `config/php/v74/zz-docker.conf` -- for PHP 8.3
+- `config/php/v74/zz-docker.conf` -- for PHP 7.4
 - `config/php/v71/zz-docker.conf` -- for PHP 7.1
 
 Example content:
@@ -373,7 +372,7 @@ environment:
 │   │   └── fastcgi_params                # FastCGI parameters
 │   ├── php/
 │   │   ├── v84/zz-docker.conf            # PHP 8.4 FPM settings
-│   │   ├── v74/zz-docker.conf            # PHP 8.3 FPM settings
+│   │   ├── v74/zz-docker.conf            # PHP 7.4 FPM settings
 │   │   └── v71/zz-docker.conf            # PHP 7.1 FPM settings
 │   └── wsl/
 │       └── README.md                     # WSL setup guide for Windows
@@ -381,7 +380,7 @@ environment:
     ├── docker-compose.build.yml          # Build config (only for building images)
     ├── Dockerfile.nginx                  # Nginx image definition
     ├── Dockerfile.php84                  # PHP 8.4 image definition
-    ├── Dockerfile.php74                  # PHP 8.3 image definition
+    ├── Dockerfile.php74                  # PHP 7.4 image definition
     ├── Dockerfile.php71                  # PHP 7.1 image definition
     └── packages/
         └── oracle/                       # Oracle Instant Client files for builds

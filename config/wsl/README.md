@@ -1,68 +1,117 @@
-## Setup WSL Ubuntu
-- install WSL 2 by using this command in Terminal (admin)
+# WSL and Docker Setup Guide for Windows
+
+This guide will walk you through installing WSL (Windows Subsystem for Linux), setting up Docker inside it, and fixing file permissions so containers can work with your Windows files.
+
+---
+
+## Part 1 -- Install WSL
+
+1. Open a terminal as Administrator (right-click the Terminal app and choose "Run as administrator").
+
+2. Install WSL:
+
     ```
     wsl --install
     ```
-- (optional) adjust wsl configuration like cpu core, ram, storage.
--  restart the machine
--  install wsl distro, here I use Ubuntu-22.04
+
+3. Restart your computer.
+
+4. Install Ubuntu. You can pick a different version if you prefer, but this guide uses Ubuntu 22.04:
+
     ```
     wsl --install -d Ubuntu-22.04
     ```
-- set your ubuntu wsl user and login
-- login as root (admin)
-    ```
-    sudo su -
-    ```
-- getting latest ubuntu update
-    ```
-    sudo apt-get update
-    ````
 
-## Setup Docker Engine (as root)
--  uninstall all conflicting packages
-    ```
-    for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
-    ```
+5. After it finishes, it will ask you to create a username and password. Fill those in.
 
--  Set up Docker's apt repository.
-    ```
-    # Add Docker's official GPG key:
-    sudo apt-get update
-    sudo apt-get install ca-certificates curl
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
+6. (Optional) You can adjust how much CPU, memory, and disk space WSL is allowed to use. See the `.wslconfig` section in the main README for details.
 
-    # Add the repository to Apt sources:
-    echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-    $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt-get update
-    ```
+---
 
--  Install the Docker packages.
-    ```
-    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    ```
+## Part 2 -- Install Docker Inside WSL
 
+All commands below should be run inside your WSL terminal. Log in as root first:
 
-- try to docker service, and see if this return Hello From Docker! then its good.
-    ```
-    docker run hello-world
-    ```
+```
+sudo su -
+```
 
-## IMPORTANT!
-file permission hack between Linux system and windows system
-- try to add this under file /etc/wsl.conf in wsl
+### Step 1 -- Remove old Docker packages
+
+If you have any older Docker installs, remove them first. It is safe to run this even if nothing is installed:
+
+```
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+```
+
+### Step 2 -- Get the latest system updates
+
+```
+sudo apt-get update
+```
+
+### Step 3 -- Add the Docker download source
+
+This tells Ubuntu where to download Docker from:
+
+```bash
+# Install required tools
+sudo apt-get install ca-certificates curl
+
+# Download Docker's signing key
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the Docker download source
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+$(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Refresh the package list
+sudo apt-get update
+```
+
+### Step 4 -- Install Docker
+
+```
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+### Step 5 -- Verify that Docker is working
+
+Run the test command below. If you see a message that says "Hello from Docker!" then everything is set up correctly:
+
+```
+docker run hello-world
+```
+
+---
+
+## Part 3 -- Fix File Permissions
+
+By default, WSL cannot properly set file ownership on files stored in your Windows folders. This causes problems when containers try to read or write files. To fix this:
+
+1. Open the WSL config file:
+
     ```
-    open up wsl config as root
-    ---
     sudo vi /etc/wsl.conf
+    ```
 
-    then paste this config at the bottom.
-    ---
+2. Add this at the bottom of the file:
+
+    ```ini
     [automount]
     options="metadata"
     ```
+
+3. Save the file and exit the editor (in vi: press `Esc`, type `:wq`, then press `Enter`).
+
+4. Restart WSL by opening a Windows terminal and running:
+
+    ```
+    wsl --shutdown
+    ```
+
+5. Open WSL again. File permissions should now work correctly.
