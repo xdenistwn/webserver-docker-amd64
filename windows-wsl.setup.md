@@ -2,8 +2,6 @@
 
 This guide will walk you through installing WSL (Windows Subsystem for Linux), setting up Docker inside it, and fixing file permissions so containers can work with your Windows files.
 
----
-
 ## Part 1 -- Install WSL
 
 1. Open a terminal as Administrator (right-click the Terminal app and choose "Run as administrator").

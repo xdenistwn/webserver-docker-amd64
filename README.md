@@ -78,13 +78,25 @@ Each PHP container comes with different tools and libraries pre-installed. The t
 
 ---
 
+## Setup for macOS Users
+
+macOS users need Colima to run Docker. Follow the full guide at [macos-colima.setup.md](macos-colima.setup.md).
+
+Quick summary:
+
+1. Install Colima, Docker, and plugins via Homebrew.
+2. Register the plugins so `docker compose` and `docker buildx` work as subcommands.
+3. Start Colima with `colima start`.
+
+---
+
 ## Setup for Windows Users
 
 Windows users need WSL (Windows Subsystem for Linux) with Docker Engine. Follow these two steps.
 
 ### Step 1 -- Set up WSL
 
-If you do not have WSL installed yet, follow the full guide at [config/wsl/README.md](config/wsl/README.md).
+If you do not have WSL installed yet, follow the full guide at [windows-wsl.setup.md](windows-wsl.setup.md).
 
 ### Step 2 -- Configure WSL for better performance
 
